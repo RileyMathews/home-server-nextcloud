@@ -1,0 +1,26 @@
+version: "3.8"
+
+networks:
+  database:
+    name: shared_postgresql_network
+    external: true
+
+
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - /mnt/md0/volumes/nextcloud/config:/config
+      - /mnt/md0/volumes/nextcloud/data:/data
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.rileymathews.com`)
+      - traefik.http.routers.nextcloud.tls.certresolver=le
+    networks:
+      - database
