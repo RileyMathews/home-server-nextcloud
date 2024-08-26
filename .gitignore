@@ -1,0 +1,4 @@
+config
+data
+postgres-data
+.env.pg.secret
